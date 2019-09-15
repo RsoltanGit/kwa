@@ -1,4 +1,5 @@
-library(plumber)
+# get connected to the main.R file
+source("main.R")
 
 #* @apiTitle Keyword Association API - Version 01
 
@@ -6,8 +7,6 @@ library(plumber)
 #* @param query The query to be processed to generate the list of related topics in the response
 #* @get /kwa
 function(query) {
-  source("main.R")
   list(related_topics = keywordAssoc(query))
 }
-
 

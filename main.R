@@ -7,14 +7,14 @@ setwd(Sys.getenv("R_USER"))
 
 
 ##### ====== Setting up the environment (installing packages and loading libraries) ====== #####
-# list of packages needed
-listOfPackages_needed <- c("tm", "tidyverse", "quanteda", "qdap", "superml", "RJSONIO", "plumber")
-# checking whether or not the required packages have already been installed.
-newPackages_toBeInstalled <- listOfPackages_needed[!(listOfPackages_needed %in% installed.packages()[, "Package"])]
+## list of packages needed
+# listOfPackages_needed <- c("tm", "tidyverse", "quanteda", "qdap", "superml", "RJSONIO", "plumber")
+## checking whether or not the required packages have already been installed.
+# newPackages_toBeInstalled <- listOfPackages_needed[!(listOfPackages_needed %in% installed.packages()[, "Package"])]
 # install them if not installed yet.
-if(length(newPackages_toBeInstalled)) {
-  install.packages(newPackages_toBeInstalled)
-}
+# if(length(newPackages_toBeInstalled)) {
+#   install.packages(newPackages_toBeInstalled)
+# }
 
 # install.packages("plumber")
 # install.packages("tm") # for text mining
@@ -33,10 +33,10 @@ if(length(newPackages_toBeInstalled)) {
 
 # library(plumber)
 library(tm)
-library(tidyverse)
+#library(tidyverse)
 library(quanteda)
 # library(qdap)
-library(superml)
+#library(superml)
 library(RJSONIO)
 
 ##### ====== user-defined functions ====== #####
