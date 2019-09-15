@@ -53,10 +53,10 @@ keywordAssoc = function(query) {
   tags = read.csv("./datasets/tag_sets.csv", header = FALSE, stringsAsFactors = FALSE)
   names(tags) = "tags"
   tgs = tags$tags
-  # the following code snippet samples 10k tags out of 90k (it works with 30k as well).
-  # the reason is efficiency matters, I will find a way to address the whole dataset (it works with 30k as well, but for the sake of efficiency, I limited that to 10k).
-  # sample 10,000 tags
-  tgs_1 = tgs[1:10000]
+  # the following code snippet samples 25k tags out of 90k (it works with 35k as well).
+  # the reason is efficiency matters, I will find a way to address the whole dataset (it works with 35k as well, but for the sake of efficiency, I limited that to 25k).
+  # sample 25,000 tags
+  tgs_1 = tgs[1:25000]
   number_of_tags <- length(tgs_1)
   # just giving each tag a name (tag + an auto generated number)
   names(tgs_1) <- paste0("tag", c(1:number_of_tags))
@@ -72,7 +72,7 @@ keywordAssoc = function(query) {
   docs$Names = c(names(tgs_1), "query")
   # a corpus is a collection of texts, often with extensive manual annotation.
   crps = Corpus(docs)
-  crps
+  # crps
   ## pre-processing & standardization
   # replacing commas with space
   crps = tm_map(crps, toSpace, ",")
@@ -83,17 +83,17 @@ keywordAssoc = function(query) {
   crps = tm_map(crps, stripWhitespace)
   # stemming
   crps = tm_map(crps, stemDocument)
-  crps[[1]]$content
+  # crps[[1]]$content
   ## building vector space model
   tdm = TermDocumentMatrix(crps)
-  inspect(tdm)
+  # inspect(tdm)
   # creating the matrix out of the tdm. This process encounters efficiency issue when passing 90k tags!
   tdm_matrix = as.matrix(tdm)
   # tf.idf weight of \( (1 + \log_2(tf)) \times \log_2(N/df) \) will be calculated...
   # the term doc matrix with the tf.idf weights calculated for each cell
   tdm_w_tfidf = TermDocumentMatrix(crps, control = list(weighting = w_tfidf))
   # inspecting the content of the created term-doc-matrix
-  inspect(tdm_w_tfidf)
+  # inspect(tdm_w_tfidf)
   # converting it into a matrix
   tdm_w_tfidf_m = as.matrix(tdm_w_tfidf)
   # printing out a sample range of the matrix
@@ -113,8 +113,8 @@ keywordAssoc = function(query) {
   # sorting the results in descending order.
   res = res[order(res$score, decreasing = TRUE), ]
   # printing out the results.
-  options(width = 2000)
-  print(res, right = FALSE, digits = 2, row.names = FALSE)
+  # options(width = 2000)
+  # print(res, right = FALSE, digits = 2, row.names = FALSE)
   
   ## top score(s) (max) calculation
   top_scored_tags = res[res$score == max(res$score), ]
