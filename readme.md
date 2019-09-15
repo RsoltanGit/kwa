@@ -8,14 +8,64 @@ The following R codes are defined in this project:
 ### main.R
 This is the main file responsible for getting the dataset and performing text analysis and extracting the association between the submitted query and the documents (tags) within the dataset.
 
-### keywordAssoc\_API.R
-This is the API written to send requests and receive responses to and from the `main.R` file. 
+### keywordAssoc_API.R
+This is the API written to send requests and receive responses to and from the `main.R` file. The content of the API file is as follows:
+```
+# get connected to the main.R file
+source("main.R")
+
+#* @apiTitle Keyword Association API - Version 01
+
+#* Gets the provided query as input and produces a list of related topics as output
+#* @param query The query to be processed to generate the list of related topics in the response
+#* @get /kwa
+function(query) {
+  list(related_topics = keywordAssoc(query))
+}
+```
 
 ### caller.R
-This is the Plumber file which will run the plumber library in getting access to the API defined in the `keywordAssoc_API.R` file.
+This is the Plumber file which will run the plumber library in getting access to the API defined in the `keywordAssoc_API.R` file. The caller.R code is listed below:
+```
+# loading the R Plumber library
+library(plumber)
+
+# creating a plumber instance by getting connected to the API defined in the "keywordAssoc_API.R" file.
+plumber_instance = plumb("keywordAssoc_API.R")
+# starting the plumber on certain port and host
+plumber_instance$run(port = 5762, host = "0.0.0.0")
+```
 
 ## R tests
-These are files defined under the `tests` folder to perform the Unit Testing over the implemented functions. They will use the `testthat` R Package for this purpose.
+These are files defined under the `tests` folder to perform the Unit Testing over the implemented functions. They will use the `testthat` R Package for this purpose. Sample Unit Testing over the `main.R` file can be found in the `test_main.R` file:
+```
+# including the main.R file to be tested
+source("../main.R", chdir = TRUE)
+
+# loading the "testthat" library for Unit Testing
+library(testthat)
+
+# testing the proper query
+test_that("correct query", {
+  expect_equal(keywordAssoc("game"), 
+               list("league", "league of legends", "lol", "logo", "game", "video game", "computer game"))
+})
+
+# testing a query with no results
+test_that("query with no result", {
+  expect_equal(keywordAssoc("blahbluebleh!"),
+               NULL)
+})
+
+# testing an empty query.
+test_that("empty query", {
+  expect_equal(keywordAssoc(""), 
+               NULL)
+})
+
+# please note with running the following script in the command line, we can see a report on tests pass/failure
+# testthat::test_dir("tests")
+```
 
 ## Docker File
 The `dockerfile` in the root directory accounts for the link to Docker (for building and running the application). After creating the docker image, its container will be run and listen to port `5762`. The content of the docker file can be listed as follows:
