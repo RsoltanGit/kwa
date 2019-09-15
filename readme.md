@@ -20,6 +20,6 @@ These are files defined under the `tests` folder to perform the Unit Testing ove
 ## Docker File
 The `dockerfile` in the root directory accounts for the link to Docker (for building and running the application).
 
-## datasets
+## Datasets
 The datasets are not uploaded as they exceed the file size limit of GitHub. They will be accessible through RB's website.
 
