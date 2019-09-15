@@ -16,7 +16,8 @@ rm(list=ls())
 # }
 
 # install.packages("plumber")
-# install.packages("tm") # for text mining
+# install.packages("xml2", repos = "http://cran.us.r-project.org")
+# install.packages("tm", repos = "http://cran.us.r-project.org") # for text mining
 # install.packages("tidyverse")
 # install.packages("quanteda")
 # install.packages("qdap")
