@@ -3,7 +3,7 @@ if(!is.null(dev.list())) dev.off()
 cat("\014") 
 rm(list=ls())
 # setting the working directory
-setwd(Sys.getenv("R_USER"))
+# setwd(Sys.getenv("R_USER"))
 
 
 ##### ====== Setting up the environment (installing packages and loading libraries) ====== #####
