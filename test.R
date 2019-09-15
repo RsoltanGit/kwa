@@ -82,3 +82,87 @@ word_associate(tags$tags, match.string = "cat", stopwords = tm::stopwords("en"),
                network.plot = T, cloud.colors = c("gray85", "darkred"))
 # add title
 title(main = "cat tag associations")
+
+################################################################################################
+# Install
+install.packages("tm")  # for text mining
+install.packages("SnowballC") # for text stemming
+install.packages("wordcloud") # word-cloud generator
+install.packages("RColorBrewer") # color palettes
+# Load
+library("tm")
+library("SnowballC")
+library("wordcloud")
+library("RColorBrewer")
+
+# Read the text file
+filepath = "C:/tmp/code/tag_sets.csv"
+text = readLines(filepath)
+
+# Load the data as a corpus
+docs <- Corpus(VectorSource(text))
+
+# inspect docs
+inspect(docs)
+
+# text transformation
+toSpace <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
+docs <- tm_map(docs, toSpace, "/")
+docs <- tm_map(docs, toSpace, "@")
+docs <- tm_map(docs, toSpace, "\\|")
+
+## Cleaning the text
+# Convert the text to lower case
+docs <- tm_map(docs, content_transformer(tolower))
+# Remove numbers
+docs <- tm_map(docs, removeNumbers)
+# Remove english common stopwords
+docs <- tm_map(docs, removeWords, stopwords("english"))
+# Remove your own stop word
+# specify your stopwords as a character vector
+docs <- tm_map(docs, removeWords, c("blabla1", "blabla2"))
+# Remove punctuations
+docs <- tm_map(docs, removePunctuation)
+# Eliminate extra white spaces
+docs <- tm_map(docs, stripWhitespace)
+
+# Building a term-document matrix
+dtm <- TermDocumentMatrix(docs)
+m <- as.matrix(dtm) ### ERROR!! Error: cannot allocate vector of size 199.4 Gb!
+v <- sort(rowSums(m),decreasing=TRUE)
+d <- data.frame(word = names(v),freq=v)
+head(d, 10)
+
+# Generating the Word cloud
+set.seed(1234)
+wordcloud(words = d$word, freq = d$freq, min.freq = 1,
+          max.words=200, random.order=FALSE, rot.per=0.35,
+          colors=brewer.pal(8, "Dark2"))
+
+# test --- 01
+# Building a term-document matrix
+dtm <- TermDocumentMatrix(docs[1:100])
+m <- as.matrix(dtm) ### ERROR!! Error: cannot allocate vector of size 199.4 Gb!
+v <- sort(rowSums(m),decreasing=TRUE)
+d <- data.frame(word = names(v),freq=v)
+head(d, 10)
+
+# Generating the Word cloud
+set.seed(1234)
+wordcloud(words = d$word, freq = d$freq, min.freq = 1,
+          max.words=200, random.order=FALSE, rot.per=0.35,
+          colors=brewer.pal(8, "Dark2"))
+
+# Explore frequent terms and their associations
+# we want to find words that occur at least four times
+findFreqTerms(dtm, lowfreq = 4)
+
+# analyzing the association between frequent terms (i.e., terms which correlate) using findAssocs() function
+findAssocs(dtm, terms = "game", corlimit = 0.3)
+
+head(d, 10)
+
+barplot(d[1:10,]$freq, las = 2, names.arg = d[1:10,]$word,
+        col ="lightblue", main ="Most frequent words",
+        ylab = "Word frequencies")
+################################################################################################
