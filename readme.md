@@ -6,7 +6,15 @@ The package will contain the following.
 The following R codes are defined in this project:
 
 ### main.R
-This is the main file responsible for getting the dataset and performing text analysis and extracting the association between the submitted query and the documents (tags) within the dataset.
+This is the main file responsible for getting the dataset and performing text analysis and extracting the association between the submitted query and the documents (tags) within the dataset. 
+Please note: if running the application locally (not using the docker), then the following packages should be installed:
+```
+install.packages("tm", repos = "http://cran.us.r-project.org") # for text mining
+install.packages("tidyverse")
+install.packages("quanteda")
+install.packages("RJSONIO")
+install.packages("plumber")
+```
 
 ### keywordAssoc_API.R
 This is the API written to send requests and receive responses to and from the `main.R` file. The content of the API file is as follows:
